@@ -1,8 +1,10 @@
-import React from 'react';
-import { getCurrentUser } from '@/services/AuthService';
+'use client';
 
-const HomePage = async () => {
-  const user = await getCurrentUser();
+import React from 'react';
+import { useUser } from '@/context/UserContext';
+
+const HomePage = () => {
+  const user = useUser();
   console.log(user);
 
   return (

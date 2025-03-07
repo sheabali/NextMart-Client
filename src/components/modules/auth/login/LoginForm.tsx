@@ -1,4 +1,5 @@
 'use client';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -14,20 +15,32 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
 import Logo from '@/app/assets/svgs/Logo';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-// import { registerUser } from '@/services/AuthService';
+import { loginUser, reCaptchaTokenVerification } from '@/services/AuthService';
 import { toast } from 'sonner';
-import { loginUser, registerUser } from '@/services/AuthService';
 import { loginSchema } from './loginValidation';
+import { useState } from 'react';
 
 export default function LoginForm() {
   const form = useForm({
     resolver: zodResolver(loginSchema),
   });
 
+  const [reCaptchaStatus, setReCaptchaStatus] = useState(false);
+
   const {
     formState: { isSubmitting },
   } = form;
+
+  const handleReCaptcha = async (value: string | null) => {
+    try {
+      const res = await reCaptchaTokenVerification(value!);
+      if (res?.success) {
+        setReCaptchaStatus(true);
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
@@ -48,9 +61,7 @@ export default function LoginForm() {
         <Logo />
         <div>
           <h1 className="text-xl font-semibold">Login</h1>
-          <p className="font-extralight text-sm text-gray-600">
-            Wellcome back.
-          </p>
+          <p className="font-extralight text-sm text-gray-600">Welcome back!</p>
         </div>
       </div>
       <Form {...form}>
@@ -92,18 +103,27 @@ export default function LoginForm() {
             )}
           />
 
+          <div className="flex mt-3 w-full">
+            <ReCAPTCHA
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY || ''}
+              onChange={handleReCaptcha}
+              className="mx-auto"
+            />
+          </div>
+
           <Button
+            disabled={reCaptchaStatus ? false : true}
             type="submit"
-            className={`mt-5 w-full ${isSubmitting && 'bg-gray-700'}`}
+            className="mt-5 w-full"
           >
-            {isSubmitting ? 'Registering....' : 'Register'}
+            {isSubmitting ? 'Logging....' : 'Login'}
           </Button>
         </form>
       </Form>
-      <p className="text-sm text-gray-600 text-center my-3 mx-4">
-        Do not have an account
-        <Link href="/register" className="text-primary mx-4">
-          Create Account
+      <p className="text-sm text-gray-600 text-center my-3">
+        Do not have any account ?
+        <Link href="/register" className="text-primary">
+          Register
         </Link>
       </p>
     </div>
