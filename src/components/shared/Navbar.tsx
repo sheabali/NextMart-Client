@@ -47,7 +47,7 @@ export default function Navbar() {
           </Button>
           {user ? (
             <>
-              <Link href="/create-store">
+              <Link href="/create-shop">
                 <Button variant="outline">Create Store</Button>
               </Link>
               <DropdownMenu>
