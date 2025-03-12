@@ -3,6 +3,11 @@ import { getCurrentUser } from './services/AuthService';
 
 const authRoutes = ['/login', '/register'];
 
+const roleBasePrivateRoutes = {
+  user: [/^\/user/],
+  admin: [/^\/admin/],
+};
+
 export const middleware = async (request: NextRequest) => {
   const { pathname } = request.nextUrl;
 
