@@ -1,12 +1,13 @@
-import ManageBrand from '@/components/modules/shop/brand';
-import ManageCategory from '@/components/modules/shop/category';
+import ManageBrands from '@/components/modules/shop/brand';
+import { getAllBrand } from '@/services/Brand';
 
-const ProductBrand = () => {
+const ProductBrandPage = async () => {
+  const { data, meta } = await getAllBrand();
   return (
     <div>
-      <ManageBrand />
+      <ManageBrands brands={data} />
     </div>
   );
 };
 
-export default ProductBrand;
+export default ProductBrandPage;

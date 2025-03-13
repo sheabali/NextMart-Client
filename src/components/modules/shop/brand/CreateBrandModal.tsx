@@ -52,7 +52,7 @@ const CreateBrandModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm">Create Brand</Button>
+        <Button>Create Brand</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
