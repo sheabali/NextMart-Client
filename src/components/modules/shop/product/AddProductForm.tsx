@@ -21,8 +21,6 @@ import { useEffect, useState } from 'react';
 import NMImageUploader from '@/components/ui/core/NMImageUploader';
 import ImagePreviewer from '@/components/ui/core/NMImageUploader/ImagePreviewer';
 import { Plus } from 'lucide-react';
-// import Logo from '@/assets/svgs/Logo';
-
 import {
   Select,
   SelectContent,
@@ -36,7 +34,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { getAllCategory } from '@/services/Category';
 import { getAllBrand } from '@/services/Brand';
-import { Value } from '@radix-ui/react-select';
+import Logo from '@/app/assets/svgs/Logo';
 
 export default function AddProductsForm() {
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
@@ -57,6 +55,7 @@ export default function AddProductsForm() {
       weight: '',
       availableColors: [{ value: '' }],
       keyFeatures: [{ value: '' }],
+      specification: [{ key: '', value: '' }],
     },
   });
 
@@ -81,6 +80,17 @@ export default function AddProductsForm() {
   const addFeatures = () => {
     appendFeatures({ value: '' });
   };
+
+  const { append: appendSpec, fields: specFields } = useFieldArray({
+    control: form.control,
+    name: 'specification',
+  });
+
+  const addSpec = () => {
+    appendSpec({ key: '', value: '' });
+  };
+
+  // console.log(specFields);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,24 +139,24 @@ export default function AddProductsForm() {
     for (const file of imageFiles) {
       formData.append('images', file);
     }
-    // try {
-    //   const res = await addProduct(formData);
+    try {
+      const res = await addProduct(formData);
 
-    //   if (res.success) {
-    //     toast.success(res.message);
-    //     router.push('/user/shop/products');
-    //   } else {
-    //     toast.error(res.message);
-    //   }
-    // } catch (err: any) {
-    //   console.error(err);
-    // }
+      if (res.success) {
+        toast.success(res.message);
+        router.push('/user/shop/products');
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
   };
 
   return (
     <div className="border-2 border-gray-300 rounded-xl flex-grow max-w-2xl p-5 ">
       <div className="flex items-center space-x-4 mb-5 ">
-        {/* <Logo /> */}
+        <Logo />
 
         <h1 className="text-xl font-bold">Add Product</h1>
       </div>
@@ -365,11 +375,7 @@ export default function AddProductsForm() {
                       <FormItem>
                         <FormLabel>Key Feature {index + 1}</FormLabel>
                         <FormControl>
-                          <Input
-                            className="my-2"
-                            {...field}
-                            value={field.value || ''}
-                          />
+                          <Input {...field} value={field.value || ''} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -378,6 +384,54 @@ export default function AddProductsForm() {
                 </div>
               ))}
             </div>
+          </div>
+
+          <div>
+            <div className="flex justify-between items-center border-t border-b py-3 my-5">
+              <p className="text-primary font-bold text-xl">Specification</p>
+              <Button
+                onClick={addSpec}
+                variant="outline"
+                className="size-10"
+                type="button"
+              >
+                <Plus className="text-primary" />
+              </Button>
+            </div>
+
+            {specFields.map((specField, index) => (
+              <div
+                key={specField.id}
+                className="grid grid-cols-1 gap-4 md:grid-cols-2 my-5"
+              >
+                <FormField
+                  control={form.control}
+                  name={`specification.${index}.key`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Feature name {index + 1}</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`specification.${index}.value`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Feature Description {index + 1}</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ''} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            ))}
           </div>
 
           <Button type="submit" className="mt-5 w-full" disabled={isSubmitting}>
