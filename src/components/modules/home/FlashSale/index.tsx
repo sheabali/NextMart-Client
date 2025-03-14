@@ -23,7 +23,7 @@ const FlashSale = async () => {
           </Link>
         </div>
         <div className="grid grid-cols-4 gap-8 my-5">
-          {product.map((product: IProduct, idx: number) => (
+          {product?.slice(0, 4).map((product: IProduct, idx: number) => (
             <ProductCard key={idx} product={product} />
           ))}
         </div>
