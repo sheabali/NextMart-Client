@@ -34,7 +34,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { getAllCategory } from '@/services/Category';
 import { getAllBrand } from '@/services/Brand';
-import Logo from '@/app/assets/svgs/Logo';
+import Logo from '@/assets/svgs/Logo';
 import { addProduct } from '@/services/Product';
 
 export default function AddProductsForm() {
