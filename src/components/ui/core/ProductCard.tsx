@@ -29,7 +29,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
           className="rounded-sm h-48 object-cover"
         />
         {product?.stock === 0 && (
-          <div className="absolute left-2 top-0 bg-red-500 text-white px-2 rounded-full">
+          <div className="absolute left-2 top-0 bg-red-500 text-white px-2 mt-4 rounded-full">
             Out of Stock
           </div>
         )}
