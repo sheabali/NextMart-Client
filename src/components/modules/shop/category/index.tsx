@@ -11,6 +11,7 @@ import { deleteCategory } from '@/services/Category';
 import { toast } from 'sonner';
 import DeleteConfirmationModal from '@/components/ui/core/NMModal/DeleteConfirmationModal';
 import { tuple } from 'zod';
+import TablePagination from '@/components/ui/core/NMTable/TablePagination';
 
 type TCategoriesProps = {
   categories: ICategory[];
@@ -106,6 +107,7 @@ const ManageCategory = ({ categories }: TCategoriesProps) => {
         onOpenChange={setModalOpen}
         onConfirm={handleDeleteConfirm}
       />
+      <TablePagination />
     </div>
   );
 };
