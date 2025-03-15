@@ -107,7 +107,6 @@ const ManageCategory = ({ categories }: TCategoriesProps) => {
         onOpenChange={setModalOpen}
         onConfirm={handleDeleteConfirm}
       />
-      <TablePagination />
     </div>
   );
 };
