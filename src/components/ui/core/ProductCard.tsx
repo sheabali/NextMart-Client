@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-
 import { IProduct } from '@/types';
 import { Heart, ShoppingCart, Star } from 'lucide-react';
 import Image from 'next/image';
@@ -16,8 +15,8 @@ import Link from 'next/link';
 
 const ProductCard = ({ product }: { product: IProduct }) => {
   return (
-    <Card className="p-3">
-      <CardHeader className="relative p-0 h-48">
+    <Card className="p-3 w-full max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
+      <CardHeader className="relative p-0 h-48 overflow-hidden rounded-lg">
         <Image
           src={
             product?.imageUrls[0] ||
@@ -26,29 +25,29 @@ const ProductCard = ({ product }: { product: IProduct }) => {
           width={500}
           height={500}
           alt="product image"
-          className="rounded-sm h-48 object-cover"
+          className="rounded-md h-48 w-full object-cover"
         />
         {product?.stock === 0 && (
-          <div className="absolute left-2 top-0 bg-red-500 text-white px-2 mt-4 rounded-full">
+          <div className="absolute left-2 top-2 bg-red-500 text-white px-3 py-1 text-xs rounded-full">
             Out of Stock
           </div>
         )}
       </CardHeader>
 
-      <CardContent className=" p-0 mt-2">
+      <CardContent className="p-2 mt-2">
         <Link href={`/products/${product?._id}`} passHref>
           <CardTitle
             title={product?.name}
-            className="font-semibold cursor-pointer text-sm"
+            className="font-semibold cursor-pointer text-sm sm:text-base truncate"
           >
-            {product?.name.length > 30
-              ? product?.name?.slice(0, 30) + '...'
+            {product?.name.length > 40
+              ? product?.name?.slice(0, 40) + '...'
               : product?.name}
           </CardTitle>
         </Link>
 
         <div className="flex items-center justify-between my-2">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             {product?.offerPrice ? (
               <>
                 <span className="font-semibold mr-2 text-orange-400">
@@ -66,7 +65,11 @@ const ProductCard = ({ product }: { product: IProduct }) => {
           </p>
 
           <div className="flex items-center justify-center gap-1">
-            <Star className="w-4 h-4" fill="orange" stroke="orange" />
+            <Star
+              className="w-4 h-4 sm:w-5 sm:h-5"
+              fill="orange"
+              stroke="orange"
+            />
             <span className="text-sm font-medium text-gray-700">
               {product?.averageRating}
             </span>
@@ -74,13 +77,13 @@ const ProductCard = ({ product }: { product: IProduct }) => {
         </div>
       </CardContent>
 
-      <CardFooter className="block p-0">
-        <div className="flex gap-2 items-center justify-between">
+      <CardFooter className="p-2">
+        <div className="flex gap-2 items-center justify-between w-full">
           <Button
             disabled={product?.stock === 0}
             size="sm"
             variant="outline"
-            className="w-32"
+            className="w-1/2 sm:w-32"
           >
             Buy Now
           </Button>
@@ -88,14 +91,14 @@ const ProductCard = ({ product }: { product: IProduct }) => {
             disabled={product?.stock === 0}
             variant="outline"
             size="sm"
-            className="w-8 h-8 p-0 flex items-center justify-center rounded-full"
+            className="w-10 h-10 flex items-center justify-center rounded-full"
           >
             <ShoppingCart />
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="w-8 h-8 p-0 flex items-center justify-center rounded-full"
+            className="w-10 h-10 flex items-center justify-center rounded-full"
           >
             <Heart />
           </Button>
