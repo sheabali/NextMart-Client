@@ -37,7 +37,7 @@ export default function PaymentDetails() {
   const handleOrder = async () => {
     const orderLoading = toast.loading('Order is being placed');
     try {
-      if (!user) {
+      if (!user.user) {
         router.push('/login');
         throw new Error('Please login first.');
       }
@@ -52,7 +52,7 @@ export default function PaymentDetails() {
         throw new Error('Cart is empty, what are you trying to order ?');
       }
 
-      const res = await createOdr;
+      // const res = await createOdr;
 
       toast.success('Order Create Successfuly.', { id: orderLoading });
     } catch (error: any) {
