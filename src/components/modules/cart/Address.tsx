@@ -20,16 +20,16 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 export default function Address() {
   const dispatch = useAppDispatch();
   const selectedCity = useAppSelector(citySelector);
-  const shoppingAddress = useAppSelector(shippingAddressSelector);
+  const shippingAddress = useAppSelector(shippingAddressSelector);
 
   const handleCitySelect = (city: string) => {
     dispatch(updateCity(city));
   };
 
-  const handleShoppingAddress = (address: string) => {
+  const handleShippingAddress = (address: string) => {
     dispatch(updateShippingAddress(address));
     console.log(selectedCity);
-    console.log(address);
+    console.log(shippingAddress);
   };
 
   return (
@@ -51,7 +51,7 @@ export default function Address() {
             </SelectContent>
           </Select>
           <Textarea
-            onChange={(e) => handleShoppingAddress(e.target.value)}
+            onChange={(e) => handleShippingAddress(e.target.value)}
             rows={5}
           />
         </div>

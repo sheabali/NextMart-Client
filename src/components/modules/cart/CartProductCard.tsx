@@ -3,6 +3,7 @@ import {
   CartProduct,
   decrementOrderQuantity,
   incrementOrderQuantity,
+  orderSelector,
   removeProduct,
 } from '@/redux/features/cartSlice';
 import { useAppDispatch } from '@/redux/hooks';
@@ -20,6 +21,10 @@ export default function CartProductCard({ product }: { product: CartProduct }) {
   };
   const handleRemoveProduct = (id: string) => {
     dispatch(removeProduct(id));
+  };
+
+  const handleOrder = () => {
+    console.log(orderSelector);
   };
 
   return (
