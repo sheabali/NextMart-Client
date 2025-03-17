@@ -58,7 +58,6 @@ const cartSlice = createSlice({
 });
 
 //* Payment
-
 export const subTotalSelector = (state: RootState) => {
   return state.cart.products.reduce((acc, product) => {
     if (product.offerPrice) {
