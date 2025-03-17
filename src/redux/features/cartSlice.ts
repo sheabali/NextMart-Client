@@ -117,6 +117,12 @@ export const shippingCostSelector = (state: RootState) => {
   }
 };
 
+export const grandTotalSelector = (state: RootState) => {
+  const subTotal = subTotalSelector(state);
+  const shippingCost = shippingCostSelector(state);
+  return subTotal + shippingCost;
+};
+
 export const {
   addProduct,
   incrementOrderQuantity,
