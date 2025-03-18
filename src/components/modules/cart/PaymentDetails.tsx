@@ -15,6 +15,8 @@ import {
 } from '@/redux/features/cartSlice';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { createOrder } from '@/services/cart';
+import { IOrder } from '@/types';
 
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -52,9 +54,16 @@ export default function PaymentDetails() {
         throw new Error('Cart is empty, what are you trying to order ?');
       }
 
-      // const res = await createOdr;
+      const res = await createOrder(order);
+      console.log(res);
 
-      toast.success('Order Create Successfuly.', { id: orderLoading });
+      if (res.success) {
+        toast.success(res.message, { id: orderLoading });
+      }
+
+      if (!res.success) {
+        toast.error(res.message, { id: orderLoading });
+      }
     } catch (error: any) {
       toast.error(error.message, { id: orderLoading });
     }
