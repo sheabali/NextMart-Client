@@ -6,6 +6,7 @@ import { currencyFormatter } from '@/lib/currencyFormatter';
 // import { currencyFormatter } from '@/lib/currencyFormatter';
 import {
   citySelector,
+  clearCart,
   grandTotalSelector,
   orderedProductsSelector,
   orderSelector,
@@ -59,6 +60,8 @@ export default function PaymentDetails() {
 
       if (res.success) {
         toast.success(res.message, { id: orderLoading });
+        dispatch(clearCart());
+        router.push(res.data.paymentUrl);
       }
 
       if (!res.success) {
