@@ -1,6 +1,7 @@
 import { IProduct } from '@/types';
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
+import { addCoupon } from '@/services/cart';
 
 export interface CartProduct extends IProduct {
   orderQuantity: number;
@@ -10,13 +11,36 @@ interface InitialState {
   products: CartProduct[];
   city: string;
   shippingAddress: string;
+  shopId: string;
 }
 
 const initialState: InitialState = {
   products: [],
   city: '',
   shippingAddress: '',
+  shopId: '',
 };
+
+export const fetchCoupon = createAsyncThunk(
+  'cart/fetchCoupon',
+  async ({
+    couponCode,
+    subTotal,
+    shopId,
+  }: {
+    couponCode: string;
+    subTotal: number;
+    shopId: string;
+  }) => {
+    try {
+      const res = await addCoupon(couponCode, subTotal, shopId);
+      return res;
+    } catch (err: any) {
+      console.log(err);
+      throw new Error(err.message);
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -69,6 +93,17 @@ const cartSlice = createSlice({
       state.city = '';
       state.shippingAddress = '';
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchCoupon.pending, (state, action) =>
+      console.log(action, 'pending')
+    );
+    builder.addCase(fetchCoupon.rejected, (state, action) =>
+      console.log(action, 'rejected')
+    );
+    builder.addCase(fetchCoupon.fulfilled, (state, action) =>
+      console.log(action, 'fulfilled')
+    );
   },
 });
 
@@ -127,6 +162,11 @@ export const grandTotalSelector = (state: RootState) => {
   const subTotal = subTotalSelector(state);
   const shippingCost = shippingCostSelector(state);
   return subTotal + shippingCost;
+};
+
+//* Coupon
+export const shopSelector = (state: RootState) => {
+  return state.cart.shopId;
 };
 
 export const {
