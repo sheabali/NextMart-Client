@@ -12,6 +12,12 @@ interface InitialState {
   city: string;
   shippingAddress: string;
   shopId: string;
+  coupon: {
+    code: string;
+    discountAmount: number;
+    isLoading: boolean;
+    error: string;
+  };
 }
 
 const initialState: InitialState = {
@@ -19,6 +25,12 @@ const initialState: InitialState = {
   city: '',
   shippingAddress: '',
   shopId: '',
+  coupon: {
+    code: '',
+    discountAmount: 0,
+    isLoading: false,
+    error: '',
+  },
 };
 
 export const fetchCoupon = createAsyncThunk(
@@ -34,6 +46,11 @@ export const fetchCoupon = createAsyncThunk(
   }) => {
     try {
       const res = await addCoupon(couponCode, subTotal, shopId);
+
+      if (!res.success) {
+        throw new Error(res.message);
+      }
+
       return res;
     } catch (err: any) {
       console.log(err);
@@ -47,6 +64,9 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addProduct: (state, action) => {
+      if (state.products.length === 0) {
+        state.shopId = action.payload.shop._id;
+      }
       const productToAdd = state.products.find(
         (product) => product._id === action.payload._id
       );
@@ -95,17 +115,32 @@ const cartSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchCoupon.pending, (state, action) =>
-      console.log(action, 'pending')
-    );
-    builder.addCase(fetchCoupon.rejected, (state, action) =>
-      console.log(action, 'rejected')
-    );
-    builder.addCase(fetchCoupon.fulfilled, (state, action) =>
-      console.log(action, 'fulfilled')
-    );
+    builder.addCase(fetchCoupon.pending, (state, action) => {
+      state.coupon.isLoading = true;
+      state.coupon.error = '';
+    });
+    builder.addCase(fetchCoupon.rejected, (state, action) => {
+      state.coupon.isLoading = false;
+      state.coupon.error = action.error.message as string;
+      state.coupon.code = '';
+      state.coupon.discountAmount = 0;
+    });
+    builder.addCase(fetchCoupon.fulfilled, (state, action) => {
+      state.coupon.isLoading = false;
+      state.coupon.error = '';
+      state.coupon.code = action.payload.data.coupon.code;
+      state.coupon.discountAmount = action.payload.data.discountAmount;
+    });
   },
 });
+
+export const couponSelector = (state: RootState) => {
+  return state.cart.coupon;
+};
+
+export const shopSelector = (state: RootState) => {
+  return state.cart.shopId;
+};
 
 //* Payment
 export const subTotalSelector = (state: RootState) => {
@@ -162,11 +197,6 @@ export const grandTotalSelector = (state: RootState) => {
   const subTotal = subTotalSelector(state);
   const shippingCost = shippingCostSelector(state);
   return subTotal + shippingCost;
-};
-
-//* Coupon
-export const shopSelector = (state: RootState) => {
-  return state.cart.shopId;
 };
 
 export const {

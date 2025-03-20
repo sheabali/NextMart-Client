@@ -12,13 +12,13 @@ const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     storeRef.current = makeStore();
   }
 
-  const persistedStore = persistStore(storeRef.current);
+  // const persistedStore = persistStore(storeRef.current);
 
   return (
     <Provider store={storeRef.current}>
-      <PersistGate loading={<Loading />} persistor={persistedStore}>
-        {children}
-      </PersistGate>
+      {children}
+      {/* <PersistGate loading={<Loading />} persistor={persistedStore}>
+      </PersistGate> */}
     </Provider>
   );
 };

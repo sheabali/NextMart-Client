@@ -22,7 +22,7 @@ const persistedReducer = persistReducer(persistConfig, cartReducer);
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      cart: persistedReducer,
+      cart: cartReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
