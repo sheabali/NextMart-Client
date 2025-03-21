@@ -7,6 +7,8 @@ import { currencyFormatter } from '@/lib/currencyFormatter';
 import {
   citySelector,
   clearCart,
+  couponSelector,
+  discountAmountSelector,
   grandTotalSelector,
   orderedProductsSelector,
   orderSelector,
@@ -27,9 +29,11 @@ export default function PaymentDetails() {
   const shippingCost = useAppSelector(shippingCostSelector);
   const order = useAppSelector(orderSelector);
   const grandTotal = useAppSelector(grandTotalSelector);
+  const discountAmount = useAppSelector(discountAmountSelector);
   const city = useAppSelector(citySelector);
   const shippingAddress = useAppSelector(shippingAddressSelector);
   const cartProducts = useAppSelector(orderedProductsSelector);
+  const coupon = useAppSelector(couponSelector);
 
   const user = useUser();
 
@@ -53,6 +57,14 @@ export default function PaymentDetails() {
       }
       if (cartProducts.length === 0) {
         throw new Error('Cart is empty, what are you trying to order ?');
+      }
+
+      let orderData;
+
+      if (coupon.code) {
+        orderData = { ...order, coupon: coupon.code };
+      } else {
+        orderData = order;
       }
 
       const res = await createOrder(order);
@@ -84,7 +96,7 @@ export default function PaymentDetails() {
         </div>
         <div className="flex justify-between">
           <p className="text-gray-500 ">Discount</p>
-          <p className="font-semibold">{currencyFormatter(0)}</p>
+          <p className="font-semibold">{currencyFormatter(discountAmount)}</p>
         </div>
         <div className="flex justify-between">
           <p className="text-gray-500 ">Shipment Cost</p>

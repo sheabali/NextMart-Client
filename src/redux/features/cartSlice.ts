@@ -138,6 +138,18 @@ export const couponSelector = (state: RootState) => {
   return state.cart.coupon;
 };
 
+//* Discount
+export const discountAmountSelector = (state: RootState) => {
+  return state.cart.coupon.discountAmount;
+};
+
+export const grandTotalSelector = (state: RootState) => {
+  const subTotal = subTotalSelector(state);
+  const shippingCost = shippingCostSelector(state);
+  const discountAmount = discountAmountSelector(state);
+  return subTotal - discountAmount + shippingCost;
+};
+
 export const shopSelector = (state: RootState) => {
   return state.cart.shopId;
 };
@@ -191,12 +203,6 @@ export const shippingCostSelector = (state: RootState) => {
   } else {
     return 0;
   }
-};
-
-export const grandTotalSelector = (state: RootState) => {
-  const subTotal = subTotalSelector(state);
-  const shippingCost = shippingCostSelector(state);
-  return subTotal + shippingCost;
 };
 
 export const {
