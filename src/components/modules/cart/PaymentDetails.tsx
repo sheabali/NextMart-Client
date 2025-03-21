@@ -28,8 +28,8 @@ export default function PaymentDetails() {
   const subTotal = useAppSelector(subTotalSelector);
   const shippingCost = useAppSelector(shippingCostSelector);
   const order = useAppSelector(orderSelector);
-  const grandTotal = useAppSelector(grandTotalSelector);
   const discountAmount = useAppSelector(discountAmountSelector);
+  const grandTotal = useAppSelector(grandTotalSelector);
   const city = useAppSelector(citySelector);
   const shippingAddress = useAppSelector(shippingAddressSelector);
   const cartProducts = useAppSelector(orderedProductsSelector);
@@ -67,7 +67,7 @@ export default function PaymentDetails() {
         orderData = order;
       }
 
-      const res = await createOrder(order);
+      const res = await createOrder(orderData);
       console.log(res);
 
       if (res.success) {

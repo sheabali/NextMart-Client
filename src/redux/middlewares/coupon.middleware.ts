@@ -18,7 +18,7 @@ export const couponMiddleware =
       action.type === removeProduct.type
     ) {
       next(action);
-
+      // console.log()
       const state: RootState = store.getState();
 
       const subTotal = subTotalSelector(state);

@@ -138,16 +138,15 @@ export const couponSelector = (state: RootState) => {
   return state.cart.coupon;
 };
 
-//* Discount
-export const discountAmountSelector = (state: RootState) => {
-  return state.cart.coupon.discountAmount;
-};
-
 export const grandTotalSelector = (state: RootState) => {
   const subTotal = subTotalSelector(state);
   const shippingCost = shippingCostSelector(state);
   const discountAmount = discountAmountSelector(state);
   return subTotal - discountAmount + shippingCost;
+};
+//* Discount
+export const discountAmountSelector = (state: RootState) => {
+  return state.cart.coupon.discountAmount;
 };
 
 export const shopSelector = (state: RootState) => {

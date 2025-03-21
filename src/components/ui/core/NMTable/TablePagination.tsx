@@ -3,6 +3,12 @@ import { Button } from '../../button';
 import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
+// interface TablePaginationProps {
+//   totalPages: number; // Total number of pages
+//   currentPage: number; // Current active page
+//   onPageChange: (page: number) => void; // Callback to handle page changes
+// }
+
 const TablePagination = ({ totalPage }: { totalPage: number }) => {
   const [currentPage, setCurrentPage] = useState(1);
   //   console.log(currentPage);
