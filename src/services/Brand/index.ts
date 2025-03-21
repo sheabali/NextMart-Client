@@ -1,20 +1,10 @@
 'use server';
 
-import { isTokenExpired } from '@/lib/verifyToken';
+import { getValidToken, isTokenExpired } from '@/lib/verifyToken';
 import { revalidateTag } from 'next/cache';
-import { cookies } from 'next/headers';
-import { getNewToken } from '../AuthService';
 
 export const createBrand = async (data: FormData) => {
-  const cookieStore = await cookies();
-  let token = cookieStore.get('accessToken')!.value;
-  console.log('form brand', await isTokenExpired(token));
-
-  if (!token || (await isTokenExpired(token))) {
-    const { data } = await getNewToken();
-    token = data?.accessToken;
-    cookieStore.set('accessToken', token);
-  }
+  const token = await getValidToken();
 
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/brand`, {
@@ -46,13 +36,15 @@ export const getAllBrand = async () => {
 
 // delete brand
 export const deleteBrand = async (brandId: string): Promise<any> => {
+  const token = await getValidToken();
+
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/brand/${brandId}`,
       {
         method: 'DELETE',
         headers: {
-          Authorization: (await cookies()).get('accessToken')!.value,
+          Authorization: token,
         },
       }
     );
