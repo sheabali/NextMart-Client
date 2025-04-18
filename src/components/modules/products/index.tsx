@@ -6,7 +6,7 @@ import FilterSidebar from './filterSidebar';
 const AllProducts = ({ products }: { products: IProduct[] }) => {
   return (
     <div className="flex gap-8 my-21">
-      <div>
+      <div className="w-full max-w-sm ">
         <FilterSidebar />
       </div>
       <div className="grid grid-cols-3 gap-8 ">
